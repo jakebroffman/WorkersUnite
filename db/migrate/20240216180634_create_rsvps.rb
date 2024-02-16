@@ -4,7 +4,8 @@ class CreateRsvps < ActiveRecord::Migration[6.1]
       t.references :user, null: false, foreign_key: true
       t.references :event, null: false, foreign_key: true
       t.references :role, null: false, foreign_key: true
-      t.boolean :attending
+      t.string :comment
+      t.boolean :attending, default: false
 
       t.timestamps
     end
