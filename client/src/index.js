@@ -1,13 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './Components/App';
 import reportWebVitals from './reportWebVitals';
+import UserContext from './Components/UserContext';
+
+const RootComponent = () => {
+  const [events, setEvents] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+  useEffect(() => {
+    fetch('/check-authentication')
+    .then((r) => {
+      
+      if (r.ok) {
+        r.json().then(user => 
+        {setCurrentUser(user)
+        setIsLoggedIn(true)}) 
+      }
+      else{ 
+        r.json()
+        .then(error => console.log(error))
+      }
+    })
+  
+
+    fetch('/events')
+      .then((r) => r.json())
+      .then((data) => {
+        setEvents(data);
+      });
+  }, []); 
+
+  return (
+    <React.StrictMode>
+      <UserContext.Provider value={{ currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn }}>
+        <App />
+      </UserContext.Provider>
+    </React.StrictMode>
+  );
+};
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <RootComponent />,
   document.getElementById('root')
 );
 

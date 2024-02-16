@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'; 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignInSide from './SignInSide';
+import LandingPage from './LandingPage';
 
 const App = () => {
 
@@ -17,6 +18,7 @@ const App = () => {
     <Router>
         <Routes>
           <Route path="/" element={<SignInSide />} />
+          <Route path="/landing" element={<LandingPage />} />
         </Routes>
     </Router>
   );

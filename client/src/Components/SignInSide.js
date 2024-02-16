@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignUp from './SignUp';
+import UserContext from './UserContext';
+
 
 function Copyright(props) {
   return (
@@ -31,16 +33,42 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
 
+const [username, setUsername] = useState('');
+const [password, setPassword] = useState('');
+const [errorMessage, setErrorMessage] = useState('');
+const { setIsLoggedIn, setCurrentUser } = useContext(UserContext);
+const navigate = useNavigate();  
 const [showSignUp, setShowSignUp] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+const handleFormSubmit = (e) => {
+  e.preventDefault();
+
+  setErrorMessage('');
+
+  fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setCurrentUser(data);
+      setIsLoggedIn(true);
+
+      navigate('/');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      setErrorMessage('Incorrect username or password');
     });
-  };
+};
 
   const handleSignUpClick = () => {
     setShowSignUp(true);
@@ -84,7 +112,7 @@ const [showSignUp, setShowSignUp] = useState(false);
             <Typography component="h1" variant="h5">
               Workers United
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleFormSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required

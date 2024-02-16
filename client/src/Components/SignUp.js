@@ -120,7 +120,7 @@ const SignUp = ({ open, onClose }) => {
         </form>
       </DialogContent>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+      <Snackbar open={snackbarOpen} autoHideDuration={1000} onClose={handleCloseSnackbar}>
         <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="success">
           Sign up successful!
         </MuiAlert>
