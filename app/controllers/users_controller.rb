@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     end
   
     def user_params
-      permitted_params = [:username, :name, :local_chapter, :city, :state, :email, :profile_photo_url]
+      permitted_params = [:username, :name, :local_chapter, :email]
       permitted_params << :password if params[:user][:password].present?
       params.require(:user).permit(permitted_params)
     end

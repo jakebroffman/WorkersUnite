@@ -6,6 +6,6 @@ class User < ApplicationRecord
     has_many :roles, through: :rsvps 
     
     validates :email, presence: true, uniqueness: { case_sensitive: false, scope: :id, message: "Email is already taken" }, format: { with: URI::MailTo::EMAIL_REGEXP }, on: :create
-    validates :name, presence: true
+    validates :username, presence: true
     validates :password, presence: true, length: { minimum: 6 }, on: :create
 end

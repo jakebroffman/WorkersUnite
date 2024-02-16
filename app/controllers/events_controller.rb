@@ -3,7 +3,7 @@ class EventsController < ApplicationController
     before_action :authenticate_user, only: [:create, :update, :destroy]
   
     def index
-      @events = Event.all
+      @events = Event.all 
       render json: @events
     end
   
@@ -43,7 +43,7 @@ class EventsController < ApplicationController
     end
 
     def event_params
-      params.require(:event).permit(:name, :date, :location, :start_time, :duration, :description)
+      params.require(:event).permit(:title, :date, :location, :start_time, :duration, :description)
     end
   end
   
