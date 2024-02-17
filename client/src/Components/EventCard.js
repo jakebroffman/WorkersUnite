@@ -1,21 +1,28 @@
 import React from 'react';
 import { Card, CardContent, Typography, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-const EventCard = ({ title, description, date, onButtonClick }) => {
+const EventCard = ({ event, onButtonClick }) => {
   return (
     <Card>
       <CardContent>
         <Typography variant="h5" component="div">
-          {title}
+          {event.title}
         </Typography>
         <Typography color="text.secondary" gutterBottom>
-          {date}
+          {event.date}
         </Typography>
         <Typography variant="body2" component="div">
-          {description}
+          {event.description}
         </Typography>
-        <Button variant="contained" onClick={onButtonClick}>
-          Click Me
+        <Typography variant="body2" component="div">
+          Organizer: {event.organizer.username}
+        </Typography>
+        <Typography variant="body2" component="div">
+          Local Chapter: {event.organizer.local_chapter}
+        </Typography>
+        <Button variant="contained" component={Link} to={`/events/${event.id}/event-details`}>
+          View Details
         </Button>
       </CardContent>
     </Card>

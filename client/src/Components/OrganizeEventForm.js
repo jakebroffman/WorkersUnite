@@ -83,7 +83,7 @@ const OrganizeEventForm = () => {
         <Grid container spacing={3}>
         <Grid item xs={6}>
             <Paper elevation={3} style={{ padding: '20px' }}>
-            <Typography variant="h5">Organize Event</Typography>
+            <Typography variant="h5">Organize an Event</Typography>
             <form onSubmit={handleOrganizeEvent}>
                 <TextField
                 fullWidth

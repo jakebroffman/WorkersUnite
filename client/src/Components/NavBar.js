@@ -58,14 +58,14 @@ const NavBar = () => {
         <Typography variant="h6" className={classes.title}>
           Workers United App
         </Typography>
-        <Button color="inherit" className={classes.button} component={Link} to="/">
+        <Button color="inherit" className={classes.button} component={Link} to="/landing">
           <HomeIcon /> 
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/organize-event">
           Organize an Event
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/browse-events">
-          Browse All Events
+          Rsvp to an Event
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/my-events">
           My Events

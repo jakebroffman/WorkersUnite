@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignInSide from './SignInSide';
 import LandingPage from './LandingPage';
 import OrganizeEventForm from './OrganizeEventForm';
+import EventDetails from './EventDetails';
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/" element={<SignInSide />} />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/organize-event" element={<OrganizeEventForm />} />
+          <Route path="/events/:eventId/event-details" element={<EventDetails />} />
         </Routes>
     </Router>
   );
