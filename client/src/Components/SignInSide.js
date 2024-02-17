@@ -62,7 +62,7 @@ const handleFormSubmit = (e) => {
       setCurrentUser(data);
       setIsLoggedIn(true);
 
-      navigate('/');
+      navigate('/landing');
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -113,15 +113,22 @@ const handleFormSubmit = (e) => {
               Workers United
             </Typography>
             <Box component="form" noValidate onSubmit={handleFormSubmit} sx={{ mt: 1 }}>
-              <TextField
+            {errorMessage && (
+                <Typography color="error" align="center" sx={{ mt: 2 }}>
+                  {errorMessage}
+                </Typography>
+              )}
+            <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -132,7 +139,9 @@ const handleFormSubmit = (e) => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              /> 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <Button
                 type="submit"
                 fullWidth

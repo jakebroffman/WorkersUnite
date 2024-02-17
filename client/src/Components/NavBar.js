@@ -1,7 +1,8 @@
-// NavBar.js
-import React from 'react';
+import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import UserContext from './UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -21,6 +22,31 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = () => {
   const classes = useStyles();
+  const { setIsLoggedIn, setCurrentUser, isLoggedIn } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogOutClick = () => {
+    fetch('/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          setIsLoggedIn(!isLoggedIn);
+          setCurrentUser(null);
+          sessionStorage.removeItem('isLoggedIn');
+          sessionStorage.removeItem('currentUser');
+          navigate('/');
+        } else {
+          console.error('Failed to log out');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -39,6 +65,9 @@ const NavBar = () => {
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/roles">
           Roles
+        </Button>
+        <Button color="inherit" className={classes.button} onClick={handleLogOutClick}>
+            Log Out
         </Button>
       </Toolbar>
     </AppBar>
