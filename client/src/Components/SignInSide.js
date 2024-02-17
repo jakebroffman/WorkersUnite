@@ -52,23 +52,24 @@ const handleFormSubmit = (e) => {
     },
     body: JSON.stringify({ username, password }),
   })
-    .then((response) => {
+    .then(async (response) => {
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const errorData = await response.json();
+        setErrorMessage(errorData.errors || ['Incorrect username or password']);
+        throw new Error('Incorrect username or password');
       }
       return response.json();
     })
     .then((data) => {
       setCurrentUser(data);
       setIsLoggedIn(true);
-
       navigate('/landing');
     })
     .catch((error) => {
       console.error('Error:', error);
-      setErrorMessage('Incorrect username or password');
     });
 };
+
 
   const handleSignUpClick = () => {
     setShowSignUp(true);

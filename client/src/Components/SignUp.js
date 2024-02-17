@@ -61,6 +61,16 @@ const SignUp = ({ open, onClose }) => {
       <DialogTitle>Sign Up</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSignUp}>
+          {errorMessages.length > 0 && (
+            <Snackbar open={true} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+              <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="error">
+                {errorMessages.map((message, index) => (
+                  <div key={index}>{message}</div>
+                ))}
+              </MuiAlert>
+            </Snackbar>
+          )}
+
           <TextField
             fullWidth
             label="Username"
@@ -125,7 +135,6 @@ const SignUp = ({ open, onClose }) => {
           Sign up successful!
         </MuiAlert>
       </Snackbar>
-
     </Dialog>
   );
 };
