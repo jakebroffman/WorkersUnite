@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './Components/App';
 import reportWebVitals from './reportWebVitals';
 import UserContext from './Components/UserContext';
+import EventContext from './Components/EventContext';
 
 const RootComponent = () => {
   const [events, setEvents] = useState([]);
@@ -35,9 +36,11 @@ const RootComponent = () => {
 
   return (
     <React.StrictMode>
-      <UserContext.Provider value={{ currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn }}>
-        <App />
-      </UserContext.Provider>
+      <EventContext.Provider value={{ events, setEvents }}>
+        <UserContext.Provider value={{ currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn }}>
+          <App />
+        </UserContext.Provider>
+      </EventContext.Provider>
     </React.StrictMode>
   );
 };
