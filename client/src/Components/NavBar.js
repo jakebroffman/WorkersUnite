@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/co
 import { Link } from 'react-router-dom';
 import UserContext from './UserContext';
 import { useNavigate } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -54,6 +55,9 @@ const NavBar = () => {
         <Typography variant="h6" className={classes.title}>
           Workers United App
         </Typography>
+        <Button color="inherit" className={classes.button} component={Link} to="/">
+          <HomeIcon />  {/* Home button with HomeIcon */}
+        </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/organize-event">
           Organize an Event
         </Button>
@@ -67,7 +71,7 @@ const NavBar = () => {
           Roles
         </Button>
         <Button color="inherit" className={classes.button} onClick={handleLogOutClick}>
-            Log Out
+          Log Out
         </Button>
       </Toolbar>
     </AppBar>
