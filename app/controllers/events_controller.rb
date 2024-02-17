@@ -10,19 +10,18 @@ class EventsController < ApplicationController
     def show
       render json: @event
     end
-
+  
     def create
-        @event = current_user.events.build(event_params)
-        @event.organizer_id = current_user.id
-      
-        if @event.save
-          render json: @event, status: :created
-        else
-          render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
-        end
+      @event = @current_user.organized_events.build(event_params)
+      @event.organizer_id = @current_user.id
+  
+      if @event.save
+        render json: @event, status: :created
+      else
+        render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
       end
-      
-
+    end
+  
     def update
       if @event.update(event_params)
         render json: @event
@@ -30,7 +29,7 @@ class EventsController < ApplicationController
         render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
       end
     end
-
+  
     def destroy
       @event.destroy
       head :no_content
@@ -41,7 +40,7 @@ class EventsController < ApplicationController
     def set_event
       @event = Event.find(params[:id])
     end
-
+  
     def event_params
       params.require(:event).permit(:title, :date, :location, :start_time, :duration, :description)
     end

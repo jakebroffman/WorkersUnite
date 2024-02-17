@@ -11,7 +11,7 @@ const LandingPage = () => {
       <NavBar />
       <Container maxWidth="md">
         <Typography variant="h1" align="center" gutterBottom>
-          Welcome to Your App, {currentUser && currentUser.username ? currentUser.username : 'Guest'}!
+          Welcome to Workers United App, {currentUser && currentUser.username ? currentUser.username : 'Guest'} !
         </Typography>
         <Typography variant="subtitle1" align="center" paragraph>
           Discover amazing features and benefits of your app.

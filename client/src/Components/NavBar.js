@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    fontSize: '1.5rem',
   },
   link: {
     textDecoration: 'none',
@@ -18,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: theme.spacing(1),
+    fontSize: 'auto',
+    whiteSpace: 'nowrap',
   },
 }));
 
@@ -56,7 +59,7 @@ const NavBar = () => {
           Workers United App
         </Typography>
         <Button color="inherit" className={classes.button} component={Link} to="/">
-          <HomeIcon />  {/* Home button with HomeIcon */}
+          <HomeIcon /> 
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/organize-event">
           Organize an Event

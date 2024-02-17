@@ -4,6 +4,7 @@ import App from './Components/App';
 import reportWebVitals from './reportWebVitals';
 import UserContext from './Components/UserContext';
 import EventContext from './Components/EventContext';
+import FontLoader from './Components/FontLoader';
 
 const RootComponent = () => {
   const [events, setEvents] = useState([]);
@@ -38,6 +39,7 @@ const RootComponent = () => {
     <React.StrictMode>
       <EventContext.Provider value={{ events, setEvents }}>
         <UserContext.Provider value={{ currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn }}>
+          <FontLoader />
           <App />
         </UserContext.Provider>
       </EventContext.Provider>
