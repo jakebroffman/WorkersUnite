@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
-import EventContext from './EventContext';
+import EventContext from './Context_Components/EventContext';
 import NavBar from './NavBar';
-import UserContext from './UserContext';
+import UserContext from './Context_Components/UserContext';
 
 import {
   Grid,
@@ -167,8 +167,8 @@ const OrganizeEventForm = () => {
             <Paper elevation={3} style={{ padding: '20px' }}>
             <Typography variant="h5">Upcoming Events</Typography>
             <div>
-                {events.map((event, index) => (
-                <EventCard key={index} event={event} />
+                {events.map((event) => (
+                <EventCard key={event.id} event={event} />
                 ))}
             </div>
             </Paper>

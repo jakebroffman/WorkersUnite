@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Paper, Typography, Button, Card, CardContent } from '@material-ui/core';
+import NavBar from './NavBar';
 
 const RolesPage = () => {
   const [roles, setRoles] = useState([]);
@@ -24,37 +25,40 @@ const RolesPage = () => {
   };
 
   return (
-    <Grid container spacing={3}>
-      {/* Left side */}
-      <Grid item xs={6}>
-        <Typography variant="h4" gutterBottom>
-          Add a new role to the database
-        </Typography>
-        <Button variant="contained" color="primary" onClick={handleAddRoleClick}>
-          Click to add role
-        </Button>
-      </Grid>
+    <div>
+      <NavBar />
+      <Grid container spacing={3}>
+        {/* Left side */}
+        <Grid item xs={6}>
+          <Typography variant="h4" gutterBottom>
+            Add a new role to the database
+          </Typography>
+          <Button variant="contained" color="primary" onClick={handleAddRoleClick}>
+            Click to add role
+          </Button>
+        </Grid>
 
-      {/* Right side */}
-      <Grid item xs={6}>
-        {roles.map((role) => (
-          <Card key={role.id} variant="outlined" style={{ marginBottom: '10px' }}>
-            <CardContent>
-              <Typography variant="h6">{role.title}</Typography>
-              <Typography variant="body2">Type: {role.paid ? 'Paid' : 'Unpaid'}</Typography>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleViewRoleDetails(role.id)}
-                style={{ marginTop: '10px' }}
-              >
-                View Role Details
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+        {/* Right side */}
+        <Grid item xs={6}>
+          {roles.map((role) => (
+            <Card key={role.id} variant="outlined" style={{ marginBottom: '10px' }}>
+              <CardContent>
+                <Typography variant="h6">{role.title}</Typography>
+                <Typography variant="body2">Type: {role.paid ? 'Paid' : 'Unpaid'}</Typography>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => handleViewRoleDetails(role.id)}
+                  style={{ marginTop: '10px' }}
+                >
+                  View Role Details
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 };
 

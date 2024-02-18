@@ -5,6 +5,7 @@ import LandingPage from './LandingPage';
 import OrganizeEventForm from './OrganizeEventForm';
 import EventDetails from './EventDetails';
 import RsvpPage from './RsvpPage';
+import RolesPage from './RolesPage';
 
 
 const App = () => {
@@ -22,10 +23,11 @@ const App = () => {
     <Router>
         <Routes>
           <Route path="/" element={<SignInSide />} />
-          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/:username/home" element={<LandingPage />} />
           <Route path="/organize-event" element={<OrganizeEventForm />} />
           <Route path="/events/:eventId" element={<EventDetails />} />
           <Route path="/browse-events" element={<RsvpPage />} />
+          <Route path='/roles' element={<RolesPage />} />
         </Routes>
     </Router>
   );

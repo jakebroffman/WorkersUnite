@@ -1,9 +1,8 @@
 class Event < ApplicationRecord
   belongs_to :organizer, class_name: 'User', foreign_key: 'organizer_id'
-  has_many :rsvps
-  has_many :attendees, through: :rsvps, source: :user
-  has_many :roles, through: :rsvps
-
+  has_many :rsvps, dependent: :destroy
+  has_many :attendees, through: :rsvps, source: :user, dependent: :destroy
+  has_many :roles, through: :rsvps, dependent: :destroy
 
   validate :organizer_cannot_rsvp
 

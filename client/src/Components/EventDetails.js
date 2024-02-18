@@ -6,8 +6,8 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import NavBar from './NavBar';
 import MuiAlert from '@material-ui/lab/Alert';
-import UserContext from './UserContext';
-import EventContext from './EventContext';
+import UserContext from './Context_Components/UserContext';
+import EventContext from './Context_Components/EventContext';
 import EditEventForm from './EditEventForm'; // Import the EditEventForm component
 
 const localizer = momentLocalizer(moment);

@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import UserContext from './UserContext';
+import UserContext from './Context_Components/UserContext';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
+import Theme from './Theme';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = () => {
   const classes = useStyles();
-  const { setIsLoggedIn, setCurrentUser, isLoggedIn } = useContext(UserContext);
+  const { setIsLoggedIn, setCurrentUser, isLoggedIn, currentUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogOutClick = () => {
@@ -58,7 +59,7 @@ const NavBar = () => {
         <Typography variant="h6" className={classes.title}>
           Workers United App
         </Typography>
-        <Button color="inherit" className={classes.button} component={Link} to="/landing">
+        <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/home`}>
           <HomeIcon /> 
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/organize-event">

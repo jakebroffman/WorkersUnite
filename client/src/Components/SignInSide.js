@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignUp from './SignUp';
-import UserContext from './UserContext';
+import UserContext from './Context_Components/UserContext';
 
 
 const theme = createTheme();
@@ -21,7 +21,7 @@ export default function SignInSide() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { setIsLoggedIn, setCurrentUser } = useContext(UserContext);
+  const { setIsLoggedIn, setCurrentUser, currentUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [showSignUp, setShowSignUp] = useState(false);
 
@@ -47,7 +47,7 @@ export default function SignInSide() {
         setCurrentUser(data);
         setIsLoggedIn(true);
 
-        navigate('/landing');
+        navigate(`/${currentUser.username}/home`);
       })
       .catch((error) => {
         console.error('Error:', error);

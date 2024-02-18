@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Typography, Container } from '@mui/material';
 import NavBar from './NavBar';  
-import UserContext from './UserContext'; 
+import UserContext from './Context_Components/UserContext'; 
 import theme from './Theme';
 
 const LandingPage = () => {

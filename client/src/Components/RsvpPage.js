@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Grid, Paper, Typography, Button, Snackbar, Card, CardContent } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import EventContext from './EventContext';
+import EventContext from './Context_Components/EventContext';
 import RsvpForm from './RsvpForm';
 import NavBar from './NavBar';
 
