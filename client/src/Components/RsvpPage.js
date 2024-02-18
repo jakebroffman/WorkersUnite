@@ -2,28 +2,31 @@ import React, { useContext, useState } from 'react';
 import { Grid, Paper, Typography, Button, Snackbar, Card, CardContent } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import EventContext from './EventContext';
-// import RsvpForm from './RsvpForm'; // Import the RsvpForm component
+import RsvpForm from './RsvpForm';
+import NavBar from './NavBar';
 
 const RsvpPage = () => {
-    const { events } = useContext(EventContext);
-    const [selectedEvent, setSelectedEvent] = useState(null);
-    const [rsvpFormOpen, setRsvpFormOpen] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-  
-    const handleRsvpButtonClick = (event) => {
-      setSelectedEvent(event);
-      setRsvpFormOpen(true);
-    };
-  
-    const handleSeeAttendeesClick = (event) => {
-      setSelectedEvent(event);
-    };
-  
-    const handleCloseSnackbar = () => {
-      setSnackbarOpen(false);
-    };
-  
-    return (
+  const { events } = useContext(EventContext);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [rsvpFormOpen, setRsvpFormOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleRsvpButtonClick = (event) => {
+    setSelectedEvent(event);
+    setRsvpFormOpen(!rsvpFormOpen); // Toggle the visibility of RsvpForm
+  };
+
+  const handleSeeAttendeesClick = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  return (
+    <div>
+      <NavBar />
       <Grid container spacing={3}>
         <Grid item xs={6}>
           {events.map((event) => (
@@ -50,8 +53,15 @@ const RsvpPage = () => {
           ))}
         </Grid>
         <Grid item xs={6}>
+          {rsvpFormOpen && (
+            <RsvpForm
+              eventId={selectedEvent ? selectedEvent.id : null}
+              onClose={() => setRsvpFormOpen(false)}
+              onRsvpSubmit={() => setSnackbarOpen(true)}
+            />
+          )}
           {selectedEvent && selectedEvent.attendees && (
-            <Paper elevation={3} style={{ padding: '20px' }}>
+            <Paper elevation={3} style={{ padding: '20px', marginTop: '10px' }}>
               <Typography variant="h5">People Attending</Typography>
               {selectedEvent.attendees.map((attendee) => (
                 <Card key={attendee.id} style={{ marginTop: '10px' }}>
@@ -64,14 +74,14 @@ const RsvpPage = () => {
             </Paper>
           )}
         </Grid>
-        <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={handleCloseSnackbar}>
-          <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="success">
-            RSVP successful!
-          </MuiAlert>
-        </Snackbar>
       </Grid>
-    );
-  };
-  
-  export default RsvpPage;
-  
+      <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="success">
+          RSVP successful!
+        </MuiAlert>
+      </Snackbar>
+    </div>
+  );
+};
+
+export default RsvpPage;
