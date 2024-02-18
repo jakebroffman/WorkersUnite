@@ -21,7 +21,7 @@ const EventCard = ({ event, onButtonClick }) => {
         <Typography variant="body2" component="div">
           Local Chapter: {event.organizer.local_chapter}
         </Typography>
-        <Button variant="contained" component={Link} to={`/events/${event.id}/event-details`}>
+        <Button variant="contained" component={Link} to={`/events/${event.id}`}>
           View Details
         </Button>
       </CardContent>
