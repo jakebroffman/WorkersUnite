@@ -40,9 +40,9 @@ const EditEventForm = ({ event, onEdit }) => {
 
   const handleEditEvent = (e) => {
     e.preventDefault();
-
+  
     fetch(`/events/${event.id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -56,16 +56,21 @@ const EditEventForm = ({ event, onEdit }) => {
             throw new Error('Failed to edit event');
           });
         }
-
+  
         setSnackbarMessage('Event edited successfully!');
         setSnackbarOpen(true);
-
-        onEdit(response.json());
+  
+        // Pass the updated event to the onEdit callback
+        return response.json();
+      })
+      .then((updatedEvent) => {
+        onEdit(updatedEvent); // Call onEdit with the updated event
       })
       .catch((error) => {
         console.error('Error editing event:', error);
       });
   };
+  
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);

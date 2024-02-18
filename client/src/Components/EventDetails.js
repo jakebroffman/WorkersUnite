@@ -25,6 +25,16 @@ const EventDetails = () => {
     setEditFormOpen(!editFormOpen); // Toggle the visibility of EditEventForm
   };
 
+  const handleEditFormSubmit = (updatedEvent) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.id === detailedEvent.id ? { ...event, ...updatedEvent } : event
+      )
+    );
+
+    handleEditEvent();
+  };
+
   const handleDeleteEvent = (eventId) => {
     fetch(`/events/${eventId}`, {
       method: 'DELETE',
@@ -86,7 +96,7 @@ const EventDetails = () => {
             </Paper>
           )}
           {editFormOpen && (
-            <EditEventForm event={detailedEvent} onEdit={() => setEditFormOpen(false)} />
+            <EditEventForm event={detailedEvent} onEdit={handleEditFormSubmit} />
           )}
         </Grid>
         <Grid item xs={6}>
