@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -16,60 +15,45 @@ import SignUp from './SignUp';
 import UserContext from './UserContext';
 
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://workersunited.org/">
-        Workers United
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const defaultTheme = createTheme();
+const theme = createTheme();
 
 export default function SignInSide() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const { setIsLoggedIn, setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [showSignUp, setShowSignUp] = useState(false);
 
-const [username, setUsername] = useState('');
-const [password, setPassword] = useState('');
-const [errorMessage, setErrorMessage] = useState('');
-const { setIsLoggedIn, setCurrentUser } = useContext(UserContext);
-const navigate = useNavigate();  
-const [showSignUp, setShowSignUp] = useState(false);
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
 
-const handleFormSubmit = (e) => {
-  e.preventDefault();
+    setErrorMessage('');
 
-  setErrorMessage('');
-
-  fetch('/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
-  })
-    .then(async (response) => {
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrorMessage(errorData.errors || ['Incorrect username or password']);
-        throw new Error('Incorrect username or password');
-      }
-      return response.json();
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
     })
-    .then((data) => {
-      setCurrentUser(data);
-      setIsLoggedIn(true);
-      navigate('/landing');
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-};
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCurrentUser(data);
+        setIsLoggedIn(true);
 
+        navigate('/landing');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setErrorMessage('Incorrect username or password');
+      });
+  };
 
   const handleSignUpClick = () => {
     setShowSignUp(true);
@@ -80,7 +64,7 @@ const handleFormSubmit = (e) => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -114,12 +98,12 @@ const handleFormSubmit = (e) => {
               Workers United
             </Typography>
             <Box component="form" noValidate onSubmit={handleFormSubmit} sx={{ mt: 1 }}>
-            {errorMessage && (
+              {errorMessage && (
                 <Typography color="error" align="center" sx={{ mt: 2 }}>
                   {errorMessage}
                 </Typography>
               )}
-            <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -158,7 +142,14 @@ const handleFormSubmit = (e) => {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
+                {'Copyright © '}
+                <Link color="inherit" href="https://workersunited.org/">
+                  Workers United
+                </Link>{' '}
+                {new Date().getFullYear()}
+                {'.'}
+              </Typography>
             </Box>
           </Box>
         </Grid>

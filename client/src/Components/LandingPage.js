@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { Button, Typography, Container } from '@mui/material';
 import NavBar from './NavBar';  
-import UserContext from './UserContext';
+import UserContext from './UserContext'; 
+import theme from './Theme';
 
 const LandingPage = () => {
   const { setIsLoggedIn, setCurrentUser, isLoggedIn, currentUser } = useContext(UserContext);

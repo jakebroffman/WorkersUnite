@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import { useTheme } from '@material-ui/core/styles'
 
 const SignUp = ({ open, onClose }) => {
+  const theme = useTheme();
   const dialogRef = useRef();
   const [formData, setFormData] = useState({
     username: '',

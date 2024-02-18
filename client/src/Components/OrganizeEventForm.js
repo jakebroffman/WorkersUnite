@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import EventContext from './EventContext';
 import NavBar from './NavBar';
+import UserContext from './UserContext';
 
 import {
   Grid,
@@ -15,6 +16,7 @@ import EventCard from './EventCard';
 
 const OrganizeEventForm = () => {
   const { events, setEvents } = useContext(EventContext);
+  const { currentUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
     title: '',
     date: '',
@@ -22,6 +24,7 @@ const OrganizeEventForm = () => {
     start_time: '',
     duration: '',
     description: '',
+    organizer: currentUser.id,
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -61,6 +64,7 @@ const OrganizeEventForm = () => {
           start_time: '',
           duration: '',
           description: '',
+          organizer: currentUser.id,
         });
 
         return response.json();

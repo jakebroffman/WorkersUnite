@@ -5,6 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import UserContext from './Components/UserContext';
 import EventContext from './Components/EventContext';
 import FontLoader from './Components/FontLoader';
+import { ThemeProvider } from '@emotion/react';
+import theme from './Components/Theme';
+import { CssBaseline } from '@mui/material';
 
 const RootComponent = () => {
   const [events, setEvents] = useState([]);
@@ -39,8 +42,11 @@ const RootComponent = () => {
     <React.StrictMode>
       <EventContext.Provider value={{ events, setEvents }}>
         <UserContext.Provider value={{ currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn }}>
-          <FontLoader />
-          <App />
+          <ThemeProvider theme ={theme}>
+            <CssBaseline />
+            <FontLoader />
+            <App />
+          </ThemeProvider>
         </UserContext.Provider>
       </EventContext.Provider>
     </React.StrictMode>

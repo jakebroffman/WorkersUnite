@@ -4,9 +4,11 @@ import SignInSide from './SignInSide';
 import LandingPage from './LandingPage';
 import OrganizeEventForm from './OrganizeEventForm';
 import EventDetails from './EventDetails';
+import { useTheme } from '@material-ui/core/styles'
 
 
 const App = () => {
+  const theme = useTheme();
 
   useEffect(
     () => {
