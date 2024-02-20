@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import { TextField, Button, Snackbar } from '@material-ui/core';
+import React, { useState, useContext } from 'react';
+import { TextField, Button, Snackbar, MenuItem, InputLabel, Select, Checkbox, FormControlLabel } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import RoleContext from './Context_Components/RoleContext';
+import UserContext from './Context_Components/UserContext';
 
 const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
+  const { currentUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
     comment: '',
     attending: false,
+    role_id: '',
+    user_id: currentUser.id,
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const { roles } = useContext(RoleContext);
 
   const handleChange = (e) => {
     setFormData({
@@ -16,9 +22,16 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
     });
   };
 
+  const handleCheckboxChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
   const handleRsvpSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('/rsvps', {
         method: 'POST',
@@ -28,29 +41,30 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
         body: JSON.stringify({
           ...formData,
           event_id: eventId,
+          user_id: currentUser.id,
         }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Failed to submit RSVP: ${errorData.message}`);
+        console.error('Error data from backend:', errorData);
+  
+        const errorMessage = Array.isArray(errorData.error)
+          ? errorData.error.join(', ')
+          : errorData.error;
+  
+        throw new Error(errorMessage);
       }
-
+  
       setSnackbarOpen(true);
       onRsvpSubmit();
       onClose();
-    } catch (error) {
-      let errorDetails;
-      try {
-        errorDetails = JSON.parse(error.message);
-      } catch (jsonError) {
-        errorDetails = { message: error.message };
-      }
-
-      setErrorState(errorDetails.message);
-      console.error('Error submitting RSVP:', error);
+    } catch (errorData) {
+      console.error('Error submitting RSVP:', errorData);
+      setErrorState(errorData.message || 'Failed to submit RSVP');
     }
   };
+  
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
@@ -67,15 +81,27 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
         value={formData.comment}
         onChange={handleChange}
       />
-      <div>
-        <label>Attending:</label>
-        <input
-          type="checkbox"
-          name="attending"
-          checked={formData.attending}
-          onChange={(e) => setFormData({ ...formData, attending: e.target.checked })}
-        />
-      </div>
+      <FormControlLabel
+        control={<Checkbox name="attending" checked={formData.attending} onChange={handleCheckboxChange} />}
+        label="Attending"
+      />
+      <InputLabel id="role-label">Select Role</InputLabel>
+      <Select
+        labelId="role-label"
+        id="role"
+        name="role_id"
+        value={formData.role_id}
+        onChange={handleChange}
+        fullWidth
+      >
+        {roles
+          .filter((role) => !role.event_id)
+          .map((role) => (
+            <MenuItem key={role.id} value={role.id}>
+              {role.title}
+            </MenuItem>
+          ))}
+      </Select>
       <Button type="submit" variant="contained" color="primary" style={{ marginTop: '10px' }}>
         RSVP
       </Button>

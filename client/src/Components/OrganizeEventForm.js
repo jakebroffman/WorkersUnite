@@ -38,7 +38,7 @@ const OrganizeEventForm = () => {
 
   const handleOrganizeEvent = (e) => {
     e.preventDefault();
-
+  
     fetch('/events', {
       method: 'POST',
       headers: {
@@ -49,12 +49,14 @@ const OrganizeEventForm = () => {
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
-            setSnackbarMessage(errorData.errors ? errorData.errors.join(', ') : 'Failed to create event');
-            setSnackbarOpen(true);
-            throw new Error('Failed to create event');
+            console.error('Error data from backend:', errorData);
+            const errorMessage = Array.isArray(errorData.errors)
+              ? errorData.errors.join(', ')
+              : errorData.errors;
+            throw new Error(errorMessage);
           });
         }
-
+  
         setSnackbarMessage('Event created successfully!');
         setSnackbarOpen(true);
         setFormData({
@@ -66,16 +68,18 @@ const OrganizeEventForm = () => {
           description: '',
           organizer: currentUser.id,
         });
-
+  
         return response.json();
       })
       .then((data) => {
         setEvents((prevEvents) => [...prevEvents, data]);
       })
-      .catch((error) => {
-        console.error('Error creating event:', error);
+      .catch((errorData) => {
+        console.error('Error creating event:', errorData);
+        setSnackbarMessage(errorData.message || 'Failed to create event');
+        setSnackbarOpen(true);
       });
-  };
+  };  
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);

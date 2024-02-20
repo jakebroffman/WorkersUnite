@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Grid, Paper, Typography, Button, Card, CardContent } from '@material-ui/core';
 import NavBar from './NavBar';
+import RoleContext from './Context_Components/RoleContext';
+import RolesForm from './RolesForm';
 
 const RolesPage = () => {
-  const [roles, setRoles] = useState([]);
+  const { roles, setRoles } = useContext(RoleContext);
+  const [showRolesForm, setShowRolesForm] = useState(false);
+  const [expandedRoleId, setExpandedRoleId] = useState(null);
 
   useEffect(() => {
-    // Fetch roles from the backend and update the state
     fetch('/roles')
       .then((response) => response.json())
       .then((data) => setRoles(data))
       .catch((error) => console.error('Error fetching roles:', error));
-  }, []); // Empty dependency array to fetch roles on component mount
+  }, [setRoles]);
 
   const handleAddRoleClick = () => {
-    // Implement logic to add a new role to the database
-    // This could open a modal or navigate to a new page with a role form
-    console.log('Add role clicked');
+    setShowRolesForm(!showRolesForm);
   };
 
   const handleViewRoleDetails = (roleId) => {
-    // Implement logic to view role details
-    console.log(`View details for role with ID: ${roleId}`);
+    setExpandedRoleId(expandedRoleId === roleId ? null : roleId);
   };
 
   return (
@@ -29,13 +29,14 @@ const RolesPage = () => {
       <NavBar />
       <Grid container spacing={3}>
         {/* Left side */}
-        <Grid item xs={6}>
-          <Typography variant="h4" gutterBottom>
+        <Grid item xs={6} style={{ textAlign: 'center' }}>
+          <Typography variant="h4" gutterBottom style={{ margin: '20px 0' }}>
             Add a new role to the database
           </Typography>
           <Button variant="contained" color="primary" onClick={handleAddRoleClick}>
             Click to add role
           </Button>
+          {showRolesForm && <RolesForm />}
         </Grid>
 
         {/* Right side */}
@@ -45,13 +46,18 @@ const RolesPage = () => {
               <CardContent>
                 <Typography variant="h6">{role.title}</Typography>
                 <Typography variant="body2">Type: {role.paid ? 'Paid' : 'Unpaid'}</Typography>
+                {expandedRoleId === role.id && (
+                  <div>
+                    <Typography variant="body2">Description: {role.responsibilities}</Typography>
+                  </div>
+                )}
                 <Button
                   variant="outlined"
                   color="primary"
                   onClick={() => handleViewRoleDetails(role.id)}
                   style={{ marginTop: '10px' }}
                 >
-                  View Role Details
+                  {expandedRoleId === role.id ? 'Close Role Details' : 'View Role Details'}
                 </Button>
               </CardContent>
             </Card>

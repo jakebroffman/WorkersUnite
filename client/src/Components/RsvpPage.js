@@ -10,6 +10,7 @@ const RsvpPage = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [rsvpFormOpen, setRsvpFormOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [errorState, setErrorState] = useState(null);
 
   const handleRsvpButtonClick = (event) => {
     setSelectedEvent(event);
@@ -22,6 +23,7 @@ const RsvpPage = () => {
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
+    setErrorState(null);
   };
 
   return (
@@ -58,12 +60,23 @@ const RsvpPage = () => {
               eventId={selectedEvent ? selectedEvent.id : null}
               onClose={() => setRsvpFormOpen(false)}
               onRsvpSubmit={() => setSnackbarOpen(true)}
+              setErrorState={setErrorState}
             />
           )}
-          {selectedEvent && selectedEvent.attendees && (
+          {selectedEvent && (
             <Paper elevation={3} style={{ padding: '20px', marginTop: '10px' }}>
               <Typography variant="h5">People Attending</Typography>
-              {selectedEvent.attendees.map((attendee) => (
+              {/* Display the organizer */}
+              {selectedEvent.organizer && (
+                <Card key={selectedEvent.organizer.id} style={{ marginTop: '10px' }}>
+                  <CardContent>
+                    <Typography variant="body1">Username: {selectedEvent.organizer.username}</Typography>
+                    <Typography variant="body1">Local Chapter: {selectedEvent.organizer.local_chapter}</Typography>
+                  </CardContent>
+                </Card>
+              )}
+              {/* Display other attendees */}
+              {selectedEvent.attendees && selectedEvent.attendees.map((attendee) => (
                 <Card key={attendee.id} style={{ marginTop: '10px' }}>
                   <CardContent>
                     <Typography variant="body1">Username: {attendee.username}</Typography>
@@ -80,6 +93,13 @@ const RsvpPage = () => {
           RSVP successful!
         </MuiAlert>
       </Snackbar>
+      {errorState && (
+        <Snackbar open={true} autoHideDuration={5000} onClose={() => setErrorState(null)}>
+          <MuiAlert elevation={6} variant="filled" onClose={() => setErrorState(null)} severity="error">
+            {errorState}
+          </MuiAlert>
+        </Snackbar>
+      )}
     </div>
   );
 };

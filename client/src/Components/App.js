@@ -6,6 +6,7 @@ import OrganizeEventForm from './OrganizeEventForm';
 import EventDetails from './EventDetails';
 import RsvpPage from './RsvpPage';
 import RolesPage from './RolesPage';
+import MyEvents from './MyEvents';
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/events/:eventId" element={<EventDetails />} />
           <Route path="/browse-events" element={<RsvpPage />} />
           <Route path='/roles' element={<RolesPage />} />
+          <Route path="/:username/my-events" element={<MyEvents />} />
         </Routes>
     </Router>
   );

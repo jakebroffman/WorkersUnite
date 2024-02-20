@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import UserContext from './Context_Components/UserContext';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import Theme from './Theme';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -31,6 +30,7 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   const handleLogOutClick = () => {
+    console.log('Logging out...');
     fetch('/logout', {
       method: 'POST',
       headers: {
@@ -39,6 +39,7 @@ const NavBar = () => {
     })
       .then((response) => {
         if (response.ok) {
+          console.log('Logout successful.');
           setIsLoggedIn(!isLoggedIn);
           setCurrentUser(null);
           sessionStorage.removeItem('isLoggedIn');
@@ -52,6 +53,7 @@ const NavBar = () => {
         console.error('Error:', error);
       });
   };
+  
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -60,7 +62,7 @@ const NavBar = () => {
           Workers United App
         </Typography>
         <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/home`}>
-          <HomeIcon /> 
+        <HomeIcon />
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/organize-event">
           Organize an Event
@@ -68,14 +70,20 @@ const NavBar = () => {
         <Button color="inherit" className={classes.button} component={Link} to="/browse-events">
           Rsvp to an Event
         </Button>
-        <Button color="inherit" className={classes.button} component={Link} to="/my-events">
+        <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/my-events`}>
           My Events
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to="/roles">
           Roles
         </Button>
-        <Button color="inherit" className={classes.button} onClick={handleLogOutClick}>
-          Log Out
+        <Button
+          color="inherit"
+          className={classes.button}
+          component={Link}
+          to="/"
+          onClick={handleLogOutClick}
+        >
+        Log Out
         </Button>
       </Toolbar>
     </AppBar>

@@ -10,26 +10,29 @@ import Alert from '@material-ui/lab/Alert';
 
 const EditEventForm = ({ event, onEdit }) => {
   const [formData, setFormData] = useState({
-    title: event.title || '',
-    date: event.date || '',
-    location: event.location || '',
-    start_time: event.start_time || '',
-    duration: event.duration || '',
-    description: event.description || '',
+    title: '',
+    date: '',
+    location: '',
+    start_time: '',
+    duration: '',
+    description: '',
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
-    setFormData({
-      title: event.title || '',
-      date: event.date || '',
-      location: event.location || '',
-      start_time: event.start_time || '',
-      duration: event.duration || '',
-      description: event.description || '',
-    });
+    if (event) {
+      setFormData({
+        title: event.title || '',
+        date: event.date || '',
+        location: event.location || '',
+        start_time: event.start_time ? event.start_time.slice(11, 16) : '', // Extract "HH:mm" from ISO string
+        duration: event.duration || '',
+        description: event.description || '',
+      });
+    }
   }, [event]);
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -41,12 +44,25 @@ const EditEventForm = ({ event, onEdit }) => {
   const handleEditEvent = (e) => {
     e.preventDefault();
   
+    if (!event) {
+      // Handle the case where the event is deleted
+      setSnackbarMessage('Event does not exist or has been deleted.');
+      setSnackbarOpen(true);
+      return;
+    }
+  
+    // Format start_time to "HH:mm"
+    const formattedStartTime = new Date(formData.start_time).toISOString().split('T')[1].substring(0, 5);
+  
     fetch(`/events/${event.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        start_time: formattedStartTime,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -70,6 +86,7 @@ const EditEventForm = ({ event, onEdit }) => {
         console.error('Error editing event:', error);
       });
   };
+  
   
 
   const handleCloseSnackbar = () => {
@@ -123,6 +140,7 @@ const EditEventForm = ({ event, onEdit }) => {
           value={formData.start_time}
           onChange={handleChange}
           InputLabelProps={{ shrink: true }}
+          inputProps={{ step: 300 }} // Set step to 5 minutes (300 seconds)
         />
         <TextField
           fullWidth
