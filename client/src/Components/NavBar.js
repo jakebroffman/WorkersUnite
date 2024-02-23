@@ -64,10 +64,10 @@ const NavBar = () => {
         <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/home`}>
         <HomeIcon />
         </Button>
-        <Button color="inherit" className={classes.button} component={Link} to="/organize-event">
+        <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/organize-event`}>
           Organize an Event
         </Button>
-        <Button color="inherit" className={classes.button} component={Link} to="/browse-events">
+        <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/browse-events`}>
           Rsvp to an Event
         </Button>
         <Button color="inherit" className={classes.button} component={Link} to={`/${currentUser.username}/my-events`}>

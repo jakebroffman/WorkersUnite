@@ -4,4 +4,5 @@ class UserSerializer < ActiveModel::Serializer
   has_many :organized_events
   has_many :attended_events
   has_many :roles
+  has_many :rsvps
 end

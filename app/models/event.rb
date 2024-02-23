@@ -4,11 +4,12 @@ class Event < ApplicationRecord
   has_many :attendees, through: :rsvps, source: :user, dependent: :destroy
   has_many :roles, through: :rsvps, dependent: :destroy
 
-  validate :organizer_cannot_rsvp
+  validate :event_cannot_be_in_the_past
 
   private
 
-  def organizer_cannot_rsvp
-    errors.add(:base, "Organizer cannot RSVP to their own event") if organizer && organizer.rsvps.find_by(event: self)
+  def event_cannot_be_in_the_past
+    errors.add(:date, "cannot be in the past") if date && date < Date.today
   end
 end
+

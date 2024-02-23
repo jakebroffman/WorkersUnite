@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, CardContent, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import UserContext from './Context_Components/UserContext';
 
 const EventCard = ({ event, onButtonClick }) => {
+  const { currentUser } = useContext(UserContext);
+
   return (
     <Card>
       <CardContent>

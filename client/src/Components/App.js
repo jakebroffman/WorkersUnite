@@ -25,9 +25,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<SignInSide />} />
           <Route path="/:username/home" element={<LandingPage />} />
-          <Route path="/organize-event" element={<OrganizeEventForm />} />
+          <Route path="/:username/organize-event" element={<OrganizeEventForm />} />
           <Route path="/events/:eventId" element={<EventDetails />} />
-          <Route path="/browse-events" element={<RsvpPage />} />
+          <Route path="/:username/browse-events" element={<RsvpPage />} />
           <Route path='/roles' element={<RolesPage />} />
           <Route path="/:username/my-events" element={<MyEvents />} />
         </Routes>

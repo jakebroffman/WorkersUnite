@@ -168,15 +168,19 @@ const OrganizeEventForm = () => {
             </Paper>
         </Grid>
         <Grid item xs={6}>
-            <Paper elevation={3} style={{ padding: '20px' }}>
-            <Typography variant="h5">Upcoming Events</Typography>
-            <div>
-                {events.map((event) => (
-                <EventCard key={event.id} event={event} />
-                ))}
-            </div>
-            </Paper>
-        </Grid>
+  <Paper elevation={3} style={{ padding: '20px' }}>
+    <Typography variant="h5">Upcoming Events</Typography>
+    <div>
+      {events
+        .slice() 
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+    </div>
+  </Paper>
+</Grid>
+
         <Snackbar
             open={snackbarOpen}
             autoHideDuration={5000}

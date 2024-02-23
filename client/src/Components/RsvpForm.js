@@ -3,6 +3,7 @@ import { TextField, Button, Snackbar, MenuItem, InputLabel, Select, Checkbox, Fo
 import MuiAlert from '@material-ui/lab/Alert';
 import RoleContext from './Context_Components/RoleContext';
 import UserContext from './Context_Components/UserContext';
+import EventContext from './Context_Components/EventContext'; // Import EventContext
 
 const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
   const { currentUser } = useContext(UserContext);
@@ -14,6 +15,7 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { roles } = useContext(RoleContext);
+  const { events, setEvents } = useContext(EventContext); // Import and use events from EventContext
 
   const handleChange = (e) => {
     setFormData({
@@ -29,42 +31,42 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
     });
   };
 
-  const handleRsvpSubmit = async (e) => {
+  const handleRsvpSubmit = (e) => {
     e.preventDefault();
-  
-    try {
-      const response = await fetch('/rsvps', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          event_id: eventId,
-          user_id: currentUser.id,
-        }),
+
+    fetch('/rsvps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...formData,
+        event_id: eventId,
+        user_id: currentUser.id,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            console.error('Error data from backend:', errorData);
+
+            const errorMessage =
+              errorData.base || (Array.isArray(errorData.error) ? errorData.error.join(', ') : errorData.error);
+
+            throw new Error(errorMessage);
+          });
+        }
+        setEvents([...events]); // Update events using setEvents
+        setSnackbarOpen(true);
+        onRsvpSubmit();
+
+        onClose();
+      })
+      .catch((error) => {
+        console.error('Error submitting RSVP:', error);
+        setErrorState(error.message || 'Failed to submit RSVP');
       });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error data from backend:', errorData);
-  
-        const errorMessage = Array.isArray(errorData.error)
-          ? errorData.error.join(', ')
-          : errorData.error;
-  
-        throw new Error(errorMessage);
-      }
-  
-      setSnackbarOpen(true);
-      onRsvpSubmit();
-      onClose();
-    } catch (errorData) {
-      console.error('Error submitting RSVP:', errorData);
-      setErrorState(errorData.message || 'Failed to submit RSVP');
-    }
   };
-  
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);

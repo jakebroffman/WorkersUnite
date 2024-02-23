@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2024_02_16_194339) do
   create_table "rsvps", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "event_id", null: false
-    t.bigint "role_id", null: false
+    t.bigint "role_id"
     t.string "comment"
     t.boolean "attending", default: false
     t.datetime "created_at", precision: 6, null: false

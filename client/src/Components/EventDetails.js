@@ -52,7 +52,6 @@ const EventDetails = () => {
       .catch((error) => {
         console.error('Error:', error);
       });
-      setEditFormOpen(!editFormOpen)
   };
 
   const handleCloseSnackbar = () => {
