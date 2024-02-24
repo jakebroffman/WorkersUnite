@@ -33,7 +33,7 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
 
   const handleRsvpSubmit = (e) => {
     e.preventDefault();
-
+  
     fetch('/rsvps', {
       method: 'POST',
       headers: {
@@ -49,17 +49,31 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
             console.error('Error data from backend:', errorData);
-
+  
             const errorMessage =
               errorData.base || (Array.isArray(errorData.error) ? errorData.error.join(', ') : errorData.error);
-
+  
             throw new Error(errorMessage);
           });
         }
-        setEvents([...events]); // Update events using setEvents
+  
+        // Assuming the response contains the newly created RSVP data
+        return response.json();
+      })
+      .then((newRsvp) => {
+        // Update events by adding the new RSVP to the corresponding event
+        const rsvpEvent = events.find(e => e.id === newRsvp.event.id)
+        const updatedRsvps = [...rsvpEvent.rsvps, newRsvp ]
+        const updatedAttendees = [...rsvpEvent.attendees, currentUser]
+        const updatedEvents = events.map( event => 
+          event.id === rsvpEvent.id ? 
+          {...event, rsvps: updatedRsvps, attendees: updatedAttendees } :
+          event )
+          debugger
+        setEvents(updatedEvents)
+  
         setSnackbarOpen(true);
         onRsvpSubmit();
-
         onClose();
       })
       .catch((error) => {
@@ -67,6 +81,7 @@ const RsvpForm = ({ eventId, onClose, onRsvpSubmit, setErrorState }) => {
         setErrorState(error.message || 'Failed to submit RSVP');
       });
   };
+  
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);

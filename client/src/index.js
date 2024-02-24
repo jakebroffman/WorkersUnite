@@ -8,13 +8,13 @@ import FontLoader from './Components/FontLoader';
 import { ThemeProvider } from '@emotion/react';
 import theme from './Components/Theme';
 import { CssBaseline } from '@mui/material';
-import RoleContext from './Components/Context_Components/RoleContext'; // Import the RolesContextProvider
+import RoleContext from './Components/Context_Components/RoleContext'; 
 
 const RootComponent = () => {
   const [events, setEvents] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState({});
-  const [roles, setRoles] = useState([]); // Include roles state
+  const [roles, setRoles] = useState([]); 
 
   useEffect(() => {
     fetch('/check-authentication')

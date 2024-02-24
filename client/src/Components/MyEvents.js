@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Grid, Typography, Card, CardContent, Button } from '@material-ui/core';
 import NavBar from './NavBar';
 import UserContext from './Context_Components/UserContext';
@@ -6,13 +6,20 @@ import EventContext from './Context_Components/EventContext';
 import EditRsvpForm from './EditRsvpForm'; // Import your EditRsvpCard component
 
 const MyEvents = () => {
-  const { currentUser } = useContext(UserContext);
-  const { events, setEvents } = useContext(EventContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { events, setEvents } = useContext(EventContext)
+  const [organizedEvents, setOrganizedEvents] = useState([]);
+  const [attendedEvents, setAttendedEvents] = useState([]);
 
-  const organizedEvents = events.filter((event) => event.organizer.id === currentUser.id);
-  const attendedEvents = events.filter((event) => {
-    return event.attendees?.some((attendee) => attendee.username === currentUser.username);
-  });
+  useEffect(() => {
+    const organized = events.filter((event) => event.organizer.id === currentUser.id);
+    const attended = events.filter((event) => {
+      return event.attendees?.some((attendee) => attendee.username === currentUser.username);
+    });
+  debugger
+    setOrganizedEvents(organized);
+    setAttendedEvents(attended);
+  }, [events, currentUser]);
 
   const [showEditRsvp, setShowEditRsvp] = useState(false); 
   const [selectedEvent, setSelectedEvent] = useState(null); 
@@ -24,41 +31,42 @@ const MyEvents = () => {
 
   const handleCantMakeIt = (event) => {
     const currentUserRsvp = event.rsvps.find((rsvp) => rsvp.user.id === currentUser.id);
+    if (!currentUserRsvp) return;
   
-    if (currentUserRsvp) {
-      fetch(`/rsvps/${currentUserRsvp.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: currentUser.id,
-        }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            // Update the events in the context to reflect the change
-            setEvents((prevEvents) => {
-              const updatedEvents = prevEvents.map((e) => {
-                if (e.id === event.id) {
-                  const updatedRsvps = e.rsvps.filter((r) => r.id !== currentUserRsvp.id);
-                  return { ...e, rsvps: updatedRsvps, attending: updatedRsvps.length };
+    fetch(`/rsvps/${currentUserRsvp.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user_id: currentUser.id }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          const updatedAttendees = event.rsvps.filter((r) => r.id !== currentUserRsvp.id);
+          const updatedEvents = events.map((e) =>
+            e.id === event.id
+              ? {
+                  ...e,
+                  rsvps: e.rsvps.filter((r) => r.id !== currentUserRsvp.id),
+                  attendees: updatedAttendees
                 }
-                return e;
-              });
-              return updatedEvents;
-            });
-  
-            // Optionally, close the EditRsvpForm if it's open for the deleted event
-            setShowEditRsvp(false);
-          }
-        })
-        .catch(() => {
+              : e
+          );
+          debugger
+          const attended = updatedEvents.filter((event) => {
+            return event.attendees?.some((attendee) => attendee.username === currentUser.username);
+          });
+          setAttendedEvents(attended)
+          setEvents(updatedEvents);
+          setShowEditRsvp(false);
+        } else {
           console.error('Failed to delete RSVP');
-        });
-    }
+        }
+      })
+      .catch((error) => {
+        console.error('Error deleting RSVP:', error);
+      });
   };
-  
   
   
   

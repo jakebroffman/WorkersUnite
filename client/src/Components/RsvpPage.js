@@ -17,16 +17,28 @@ import UserContext from './Context_Components/UserContext';
 const RsvpPage = () => {
   const { events, setEvents } = useContext(EventContext);
   const { currentUser } = useContext(UserContext);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState({
+    attendees: [],
+    rsvps: []
+  });
   const [isRsvpFormVisible, setIsRsvpFormVisible] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [errorState, setErrorState] = useState(null);
   const [isRsvpSuccess, setIsRsvpSuccess] = useState(false);
 
   const handleRsvpButtonClick = (event) => {
-    setSelectedEvent((selectedEvent) => (selectedEvent && selectedEvent.id === event.id ? null : event));
-    setIsRsvpFormVisible(true);
+    setSelectedEvent(event)
+    // setSelectedEvent((selectedEvent) => { 
+    //   // (selectedEvent && selectedEvent.id === event.id ? null : event)
+    //   if (!(selectedEvent&& selectedEvent.id === event.id)){
+    //     debugger
+    //     return event
+    //   }
+    // });
+    setIsRsvpFormVisible(isRsvpFormVisible => !isRsvpFormVisible);
   };
+
+
 
   const handleRsvpSuccessSnackbarClose = () => {
     setIsRsvpSuccess(false);
@@ -37,12 +49,12 @@ const RsvpPage = () => {
     setErrorState(null);
   };
 
-  const handleRsvpSubmit = (newRsvp) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) =>
-        event.id === selectedEvent.id ? { ...event, attendees: [...event.attendees, newRsvp] } : event
-      )
-    );
+  const handleRsvpSubmit = () => {
+    // setEvents((prevEvents) =>
+    //   prevEvents.map((event) =>
+    //     event.id === selectedEvent.id ? { ...event, attendees: [...event.attendees, newRsvp] } : event
+    //   )
+    // );
     setSnackbarOpen(true);
     setIsRsvpFormVisible(false);
     setIsRsvpSuccess(true);
@@ -80,7 +92,9 @@ const RsvpPage = () => {
                 <RsvpForm
                   eventId={selectedEvent.id}
                   onClose={() => {
-                    setSelectedEvent(null);
+                    setSelectedEvent({
+                      attendees: []
+                    });
                     setIsRsvpFormVisible(false);
                     setIsRsvpSuccess(true);
                   }}
@@ -106,7 +120,7 @@ const RsvpPage = () => {
                   </CardContent>
                 </Card>
               )}
-              {selectedEvent.attendees.map((attendee) => (
+              {selectedEvent.attendees.map((attendee) => ( 
                 <Card key={attendee.id} style={{ marginTop: '10px' }}>
                   <CardContent>
                     <Typography variant="body1">Username: {attendee.username}</Typography>
