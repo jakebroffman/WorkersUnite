@@ -14,7 +14,7 @@ const RolesPage = () => {
       .then((response) => response.json())
       .then((data) => setRoles(data))
       .catch((error) => console.error('Error fetching roles:', error));
-  }, [setRoles]);
+  }, [setRoles]); 
 
   const handleAddRoleClick = () => {
     setShowRolesForm(!showRolesForm);

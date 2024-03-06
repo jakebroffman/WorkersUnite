@@ -35,16 +35,32 @@ const OrganizeEventForm = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+ 
   const handleOrganizeEvent = (e) => {
     e.preventDefault();
-  
+
+    // // Format start_time to "HH:mm"
+    // const startDateTime = new Date(formData.date + 'T' + formData.start_time + ':00');
+
+    // if (isNaN(startDateTime)) {
+    //   console.error('Invalid date or start time:', formData.date, formData.start_time);
+    //   setSnackbarMessage('Invalid date or start time');
+    //   setSnackbarOpen(true);
+    //   return;
+    // }
+    
+    // // Make sure startDateTime is a valid date before creating formattedStartTime
+    // const formattedStartTime = startDateTime.toISOString().split('T')[1].substring(0, 5);
+    
+
     fetch('/events', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -56,7 +72,7 @@ const OrganizeEventForm = () => {
             throw new Error(errorMessage);
           });
         }
-  
+
         setSnackbarMessage('Event created successfully!');
         setSnackbarOpen(true);
         setFormData({
@@ -68,7 +84,7 @@ const OrganizeEventForm = () => {
           description: '',
           organizer: currentUser.id,
         });
-  
+
         return response.json();
       })
       .then((data) => {
@@ -79,7 +95,7 @@ const OrganizeEventForm = () => {
         setSnackbarMessage(errorData.message || 'Failed to create event');
         setSnackbarOpen(true);
       });
-  };  
+  };
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
@@ -87,13 +103,13 @@ const OrganizeEventForm = () => {
 
   return (
     <div>
-        <NavBar />  
-        <Grid container spacing={3}>
+      <NavBar />
+      <Grid container spacing={3}>
         <Grid item xs={6}>
-            <Paper elevation={3} style={{ padding: '20px' }}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
             <Typography variant="h5">Organize an Event</Typography>
             <form onSubmit={handleOrganizeEvent}>
-                <TextField
+              <TextField
                 fullWidth
                 label="Title"
                 name="title"
@@ -102,8 +118,8 @@ const OrganizeEventForm = () => {
                 required
                 value={formData.title}
                 onChange={handleChange}
-                />
-                <TextField
+              />
+              <TextField
                 fullWidth
                 label="Date"
                 name="date"
@@ -114,8 +130,8 @@ const OrganizeEventForm = () => {
                 value={formData.date}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true }}
-                />
-                <TextField
+              />
+              <TextField
                 fullWidth
                 label="Location"
                 name="location"
@@ -124,8 +140,8 @@ const OrganizeEventForm = () => {
                 required
                 value={formData.location}
                 onChange={handleChange}
-                />
-                <TextField
+              />
+              <TextField
                 fullWidth
                 label="Start Time"
                 name="start_time"
@@ -136,8 +152,8 @@ const OrganizeEventForm = () => {
                 value={formData.start_time}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true }}
-                />
-                <TextField
+              />
+              <TextField
                 fullWidth
                 label="Duration (in minutes)"
                 name="duration"
@@ -148,8 +164,8 @@ const OrganizeEventForm = () => {
                 value={formData.duration}
                 onChange={handleChange}
                 inputProps={{ step: 30 }}
-                />
-                <TextField
+              />
+              <TextField
                 fullWidth
                 label="Description"
                 name="description"
@@ -160,40 +176,40 @@ const OrganizeEventForm = () => {
                 required
                 value={formData.description}
                 onChange={handleChange}
-                />
-                <Button type="submit" variant="contained" color="primary" style={{ marginTop: '10px' }}>
+              />
+              <Button type="submit" variant="contained" color="primary" style={{ marginTop: '10px' }}>
                 Organize Event
-                </Button>
+              </Button>
             </form>
-            </Paper>
+          </Paper>
         </Grid>
         <Grid item xs={6}>
-  <Paper elevation={3} style={{ padding: '20px' }}>
-    <Typography variant="h5">Upcoming Events</Typography>
-    <div>
-      {events
-        .slice() 
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
-        .map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
-    </div>
-  </Paper>
-</Grid>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <Typography variant="h5">Upcoming Events</Typography>
+            <div>
+              {events
+                .slice()
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+            </div>
+          </Paper>
+        </Grid>
 
         <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={5000}
-            onClose={handleCloseSnackbar}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          open={snackbarOpen}
+          autoHideDuration={5000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-            <Alert onClose={handleCloseSnackbar} severity="error" variant="filled">
+          <Alert onClose={handleCloseSnackbar} severity="error" variant="filled">
             {snackbarMessage}
-            </Alert>
+          </Alert>
         </Snackbar>
-        </Grid>
+      </Grid>
     </div>
-  );  
+  );
 };
 
 export default OrganizeEventForm;

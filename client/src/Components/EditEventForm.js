@@ -22,16 +22,21 @@ const EditEventForm = ({ event, onEdit }) => {
 
   useEffect(() => {
     if (event) {
+      const startDateTime = new Date(event.start_time);
+      const hours = startDateTime.getHours();
+      const minutes = startDateTime.getMinutes();
+  
       setFormData({
         title: event.title || '',
         date: event.date || '',
         location: event.location || '',
-        start_time: event.start_time ? event.start_time.slice(11, 16) : '', // Extract "HH:mm" from ISO string
+        start_time: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
         duration: event.duration || '',
         description: event.description || '',
       });
     }
   }, [event]);
+  
   
 
   const handleChange = (e) => {
@@ -51,9 +56,6 @@ const EditEventForm = ({ event, onEdit }) => {
       return;
     }
   
-    // Format start_time to "HH:mm"
-    const formattedStartTime = new Date(formData.start_time).toISOString().split('T')[1].substring(0, 5);
-  
     fetch(`/events/${event.id}`, {
       method: 'PATCH',
       headers: {
@@ -61,7 +63,6 @@ const EditEventForm = ({ event, onEdit }) => {
       },
       body: JSON.stringify({
         ...formData,
-        start_time: formattedStartTime,
       }),
     })
       .then((response) => {
@@ -72,7 +73,6 @@ const EditEventForm = ({ event, onEdit }) => {
             throw new Error('Failed to edit event');
           });
         }
-  
         setSnackbarMessage('Event edited successfully!');
         setSnackbarOpen(true);
   

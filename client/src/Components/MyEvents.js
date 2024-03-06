@@ -16,7 +16,6 @@ const MyEvents = () => {
     const attended = events.filter((event) => {
       return event.attendees?.some((attendee) => attendee.username === currentUser.username);
     });
-  debugger
     setOrganizedEvents(organized);
     setAttendedEvents(attended);
   }, [events, currentUser]);
@@ -52,7 +51,6 @@ const MyEvents = () => {
                 }
               : e
           );
-          debugger
           const attended = updatedEvents.filter((event) => {
             return event.attendees?.some((attendee) => attendee.username === currentUser.username);
           });
@@ -105,7 +103,7 @@ const MyEvents = () => {
               <CardContent>
                 <Typography variant="h6">{event.title}</Typography>
                 <Typography variant="body2">Date: {event.date}</Typography>
-                {/* Buttons for changing RSVP */}
+                <Typography variant="body2">Role: {event.rsvps[0].role.title}</Typography>
                 <Button variant="outlined" color="primary" onClick={() => handleRsvpChange(event)}>
                   Change RSVP
                 </Button>
